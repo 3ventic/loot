@@ -208,8 +208,26 @@ def createApiArchive(archive_path):
     # And finally, delete the temporary folder.
     shutil.rmtree(temp_path)
 
+def createValidatorArchive(archive_path):
+    temp_path = os.path.join('..', 'build', 'archive.tmp')
+
+    # Delete the temporary folder if it already exists, then create it.
+    if os.path.exists(temp_path):
+        shutil.rmtree(temp_path)
+    os.makedirs(temp_path)
+
+    # Now copy the executable into the temporary folder.
+    shutil.copy( os.path.join('..', 'build', 'Release', 'metadata-validator.exe'), temp_path )
+
+    # Now compress the temporary folder.
+    createArchive(temp_path, archive_path);
+
+    # And finally, delete the temporary folder.
+    shutil.rmtree(temp_path)
+
 # Create the archives.
 archive_suffix = getNameSuffix()
 buildUIFiles( os.path.join('..', 'resources', 'report') );
 createAppArchive( os.path.join('..', 'build', 'LOOT ' + archive_suffix) )
 createApiArchive( os.path.join('..', 'build', 'LOOT API ' + archive_suffix) )
+createValidatorArchive( os.path.join('..', 'build', 'Metadata Validator ' + archive_suffix) )
